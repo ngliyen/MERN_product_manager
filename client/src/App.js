@@ -1,12 +1,28 @@
 import React from 'react';
 import './App.css';
 import Main from './views/Main';
+import OneProduct from './views/OneProduct';
+import {
+  BrowserRouter,
+  Switch,
+  Route
+} from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <Main />
-    </div>
+    <BrowserRouter>
+      <div className="App">
+        <Switch>
+          <Route exact path="/">
+            <Main />    
+          </Route>
+          <Route path="/product/:id">
+            <OneProduct />    
+          </Route>
+        </Switch>
+      </div>
+    </BrowserRouter>
+
   );
 }
 
