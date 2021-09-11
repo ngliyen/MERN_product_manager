@@ -1,14 +1,22 @@
 import React, {useState} from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 
 const ProductForm = (props) => {
-  const {addProduct} = props;
-  const [formData, setFormData] = useState({
-    "title": "",
-    "price": 0,
-    "description": ""
-  })
+  // const {addProduct} = props;
 
+  // const [formData, setFormData] = useState({
+  //   "title": "",
+  //   "price": 0,
+  //   "description": ""
+  // })
+  // ===== Refactor (Start) =====
+  const {initialFormData, onSubmitProp, buttonText} = props;
+  const [formData, setFormData] = useState({
+    "title": initialFormData.title,
+    "price": initialFormData.price,
+    "description": initialFormData.description
+  })
+  // ===== Refactor (End) =====
   const changeHandler = (e) => {
     const {name, value} = e.target;
 
@@ -19,22 +27,30 @@ const ProductForm = (props) => {
     })
   }
 
+  // const submitHandler = (e) => {
+  //   e.preventDefault();
+  //   axios.post("http://localhost:8000/api/products", {
+  //     title: formData.title,
+  //     price: formData.price,
+  //     description: formData.description
+  //   })
+  //     .then(res=>{
+  //       console.log(res.data);
+  //       addProduct(res.data);
+  //     })
+  //     .catch(err=>console.log(err))
+
+  // }
+
+  // ===== Refactor (Start) =====
   const submitHandler = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:8000/api/products", {
-      title: formData.title,
-      price: formData.price,
-      description: formData.description
-    })
-      .then(res=>{
-        console.log(res.data);
-        addProduct(res.data);
-      })
-      .catch(err=>console.log(err))
+    onSubmitProp(formData);
 
   }
+    // ===== Refactor (End) =====
   return(
-    <div className="container w-25 mt-5">
+    <div className="container w-50 mt-5">
       <form onSubmit={submitHandler}>
         <p className="d-flex gap-3">
           <label htmlFor="title" className="form-label col-3">Title </label>
@@ -49,7 +65,7 @@ const ProductForm = (props) => {
           <input className="form-control w-50" type="text" onChange={changeHandler} name="description" value={formData.description}/>
         </p>
         <div>
-          <button className="btn btn-dark" type="submit">Create</button>
+          <button className="btn btn-dark" type="submit">{buttonText}</button>
         </div>
 
       </form>

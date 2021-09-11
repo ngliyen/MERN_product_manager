@@ -16,17 +16,32 @@ const Main = () => {
       .catch(err => console.log(err));
   }, [])
 
+  // create a product
+  const createProduct = (product) => {
+    axios.post("http://localhost:8000/api/products", product)
+      .then(res=> {
+        setProducts([...products, res.data]);
+      })
+      .catch(err=>console.log(err))
+  }
+
   const deleteProduct = (productId) => {
     setProducts(products.filter(product => product._id !== productId));
   }
 
-  const addProduct = (productObj) => {
-    setProducts([...products,productObj]);
+  // const addProduct = (productObj) => {
+  //   setProducts([...products,productObj]);
+  // }
+
+  const initialFormData = {
+    title: "",
+    price: 0,
+    description: ""
   }
 
   return(
     <div>
-      <ProductForm addProduct = {addProduct} />
+      <ProductForm onSubmitProp = {createProduct} initialFormData={initialFormData} buttonText="Create" />
       <hr/>
       {loaded && <ProductList products={products} deleteProduct = {deleteProduct} />}
     </div>

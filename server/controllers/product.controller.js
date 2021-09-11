@@ -7,7 +7,7 @@ module.exports.index = (req,res) => {
 
 module.exports.createProduct = (req,res) => {
   const {title, price, description} = req.body;
-  console.log(req.body);
+  // console.log(req.body);
   Product.create({
     title,
     price,
