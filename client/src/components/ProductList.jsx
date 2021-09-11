@@ -1,33 +1,32 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {Link} from "react-router-dom";
 import axios from 'axios';
 
 const ProductList = (props) => {
-  const [products, setProducts] = useState([]);
-  const [loaded,setLoaded] = useState(false);
+  const {deleteProduct} = props;
 
-  useEffect(() => {
-    axios.get("http://localhost:8000/api/products")
+  const deleteHandler = (productId) => {
+    axios.delete("http://localhost:8000/api/products/" + productId)
       .then(res => {
-        console.log(res.data);
-        setProducts(res.data);
-        setLoaded(true);
-        console.log(loaded);
+        console.log("Delete API here")
+        deleteProduct(productId)
       })
-      .catch(err => console.log(err));
-  }, [products])
+      .catch(err => console.log("Delete API not working", err));
+  }
 
   return(
-    <div>
-      {(loaded === true) ?
-      <div> 
-        <h3>All Products</h3>
-        {products.map((product,idx) => 
-          <p key={idx}><Link to={`/product/${product._id}`}>{product.title}</Link></p>
-          // <p>{product._id}: {product.title}</p>
+    <div> 
+      <h3>All Products</h3>
+      {props.products.map((product,idx) => {
+        return (
+        <div className="justify-content-center align-items-center d-flex gap-5">
+          <p className="mb-0 col-1 text-start" key={idx}><Link to={"/product/" + product._id}>{product.title}</Link></p>
+          <button className="col-1" onClick={(e) => {deleteHandler(product._id)}} className="btn btn-link">Delete</button>
+        </div>
         )}
-      </div>
-       : ""}
+        
+        // <p>{product._id}: {product.title}</p>
+      )}
     </div>
   )
 }

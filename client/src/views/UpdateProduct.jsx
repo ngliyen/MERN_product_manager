@@ -1,14 +1,31 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
+import {useParams, useHistory} from "react-router-dom";
 
-const ProductForm = (props) => {
-  const {addProduct} = props;
+const UpdateProduct = (props) => {
+  const {id} = useParams();
   const [formData, setFormData] = useState({
     "title": "",
     "price": 0,
     "description": ""
   })
 
+  const history = useHistory();
+
+  useEffect(() => {
+    axios.get("http://localhost:8000/api/products/" + id)
+      .then(res => {
+        setFormData({
+          ...formData,
+          ["title"]: res.data.title,
+          ["price"]: res.data.price,
+          ["description"]: res.data.description,
+          ["id"]: res.data._id
+        })
+      })
+  }, [])
+
+  
   const changeHandler = (e) => {
     const {name, value} = e.target;
 
@@ -19,23 +36,23 @@ const ProductForm = (props) => {
     })
   }
 
-  const submitHandler = (e) => {
+  const updateProduct = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:8000/api/products", {
+    axios.put("http://localhost:8000/api/products/" + id, {
       title: formData.title,
       price: formData.price,
       description: formData.description
     })
-      .then(res=>{
-        console.log(res.data);
-        addProduct(res.data);
+      .then(res => {
+        console.log(res);
+        history.push("/product/" + formData.id);
       })
-      .catch(err=>console.log(err))
-
+      .catch(err => console.log(err))
   }
+
   return(
     <div className="container w-25 mt-5">
-      <form onSubmit={submitHandler}>
+      <form onSubmit={updateProduct}>
         <p className="d-flex gap-3">
           <label htmlFor="title" className="form-label col-3">Title </label>
           <input className="form-control w-50" type="text" onChange={changeHandler} name="title" value={formData.title}/>
@@ -49,14 +66,11 @@ const ProductForm = (props) => {
           <input className="form-control w-50" type="text" onChange={changeHandler} name="description" value={formData.description}/>
         </p>
         <div>
-          <button className="btn btn-dark" type="submit">Create</button>
+          <button className="btn btn-dark" type="submit">Update</button>
         </div>
-
       </form>
     </div>
   )
 }
 
-
-
-export default ProductForm;
+export default UpdateProduct;

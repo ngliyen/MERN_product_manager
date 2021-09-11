@@ -2,6 +2,8 @@ import React from 'react';
 import './App.css';
 import Main from './views/Main';
 import OneProduct from './views/OneProduct';
+import UpdateProduct from './views/UpdateProduct';
+
 import {
   BrowserRouter,
   Switch,
@@ -18,6 +20,9 @@ function App() {
           </Route>
           <Route path="/product/:id">
             <OneProduct />    
+          </Route>
+          <Route path="/:id/edit">
+            <UpdateProduct />    
           </Route>
         </Switch>
       </div>

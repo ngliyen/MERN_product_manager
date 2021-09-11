@@ -7,4 +7,10 @@ module.exports = (app) => {
   //READ
   app.get("/api/products", ProductController.getAllProducts);
   app.get("/api/products/:id", ProductController.getProductById);
+
+  //UPDATE
+  app.put("/api/products/:id", ProductController.updateProduct);
+
+  //DELETE
+  app.delete("/api/products/:id", ProductController.deleteProductById);
 }
